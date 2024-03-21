@@ -1,0 +1,182 @@
+// Font Size to rem
+@use "sass:math";
+@mixin fontRem($size, $weight: 400, $lineHeight: initial) {
+    font-size: math.div($size, 16) + rem !important;
+    font-weight: $weight !important;
+    @if ($lineHeight == initial) {
+        line-height: $lineHeight !important;
+    } @else {
+        line-height: math.div($lineHeight, $size) !important;
+    }
+}
+// Font Size to rem end
+
+@function str-replace($string, $search, $replace: "") {
+    $index: str-index($string, $search);
+
+    @if $index {
+        @return str-slice($string, 1, $index - 1) + $replace +
+            str-replace(str-slice($string, $index + str-length($search)), $search, $replace);
+    }
+
+    @return $string;
+}
+
+@mixin font-face($name, $path, $weight: null, $style: null, $exts: eot woff2 woff ttf svg) {
+    $src: null;
+
+    $extmods: (
+        eot: "?",
+        svg: "#" + str-replace($name, " ", "_")
+    );
+
+    $formats: (
+        otf: "opentype",
+        ttf: "truetype"
+    );
+
+    @each $ext in $exts {
+        $extmod: if(map-has-key($extmods, $ext), $ext + map-get($extmods, $ext), $ext);
+        $format: if(map-has-key($formats, $ext), map-get($formats, $ext), $ext);
+        $src: append($src, url(quote($path + "." + $extmod)) format(quote($format)), comma);
+    }
+
+    @font-face {
+        font-family: quote($name);
+        font-style: $style;
+        font-weight: $weight;
+        src: $src;
+    }
+}
+// FONT FACE END
+// text shortign
+@mixin textShorten($numLines: 1) {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    @supports (-webkit-line-clamp: $numLines) {
+        white-space: initial;
+        display: -webkit-box;
+        -webkit-line-clamp: $numLines;
+        -webkit-box-orient: vertical;
+    }
+}
+// text shortign end
+
+// flex with childs
+@mixin flexRow($distance, $count: 1, $align: stretch) {
+    display: flex;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+    align-items: $align;
+    margin-left: -math.div($distance, 2) + px;
+    margin-right: -math.div($distance, 2) + px;
+    > [class*="col_"] {
+        flex: 0 0 math.div(100%, $count);
+        max-width: math.div(100%, $count);
+        padding-left: math.div($distance, 2) + px;
+        padding-right: math.div($distance, 2) + px;
+    }
+}
+@mixin RowItems($distance, $align: stretch) {
+    display: flex;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+    align-items: $align;
+    margin-left: -math.div($distance, 2) + px;
+    margin-right: -math.div($distance, 2) + px;
+    > [class*="col_"] {
+        padding-left: math.div($distance, 2) + px;
+        padding-right: math.div($distance, 2) + px;
+    }
+}
+
+// flex with childs
+
+// Flex alignment
+@mixin flex-column {
+    display: flex;
+    flex-direction: column;
+}
+@mixin d-flex {
+    display: flex;
+    flex-wrap: wrap;
+}
+@mixin flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+@mixin flex-center-column {
+    @include flex-center;
+    flex-direction: column;
+}
+
+@mixin flex-center-vert {
+    display: flex;
+    align-items: center;
+}
+
+@mixin flex-center-horiz {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+// Flex alignment end
+
+// absolute positing
+@mixin absoluteCenter($position) {
+    position: absolute;
+    @if $position == "vertical" {
+        top: 50%;
+        -webkit-transform: translateY(-50%);
+        -ms-transform: translateY(-50%);
+        transform: translateY(-50%);
+    } @else if $position == "horizontal" {
+        left: 50%;
+        -webkit-transform: translateX(-50%);
+        -ms-transform: translateX(-50%);
+        transform: translate(-50%);
+    } @else if $position == "both" {
+        top: 50%;
+        left: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+    }
+}
+// absolute positing end
+// Button Nulled
+@mixin buttonNulled {
+    padding: 0;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+// Button Nulled end
+// Border Arrow
+@mixin arrow($direction: down, $size: 5px, $color: #555) {
+    width: 0;
+    height: 0;
+    @if ($direction == left) {
+        border-top: $size solid transparent;
+        border-bottom: $size solid transparent;
+        border-right: $size solid $color;
+    } @else if ($direction == right) {
+        border-top: $size solid transparent;
+        border-bottom: $size solid transparent;
+        border-left: $size solid $color;
+    } @else if ($direction == down) {
+        border-left: $size solid transparent;
+        border-right: $size solid transparent;
+        border-top: $size solid $color;
+    } @else {
+        border-left: $size solid transparent;
+        border-right: $size solid transparent;
+        border-bottom: $size solid $color;
+    }
+}
+// Border Arrow end

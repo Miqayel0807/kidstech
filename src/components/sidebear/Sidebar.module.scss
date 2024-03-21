@@ -1,0 +1,13 @@
+@import "/src/styles/mixins";
+@import "/src/styles/pallete";
+
+.aside {
+    position: sticky;
+    top: 24px;
+    padding: 12px;
+    border: 1px solid $gray;
+    border-radius: 18px;
+    ul {
+        list-style-type: none;
+    }
+}

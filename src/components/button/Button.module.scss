@@ -1,0 +1,22 @@
+@import "/src/styles/mixins";
+@import "/src/styles/pallete";
+
+.button {
+    @include flex-center-vert;
+    @include buttonNulled;
+    @include fontRem(18, 800, 18);
+    letter-spacing: 0.1px;
+    padding: 12px;
+    border-radius: 12px;
+    width: 100%;
+    &.active {
+        background-color: $active;
+        color: $white;
+        &:hover {
+            color: lighten($color: $white, $amount: 5);
+        }
+    }
+    &:hover {
+        color: lighten($color: $main, $amount: 5);
+    }
+}
